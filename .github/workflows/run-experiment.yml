@@ -1,0 +1,39 @@
+name: 'Run experiment'
+
+on:
+  workflow_dispatch:
+    inputs:
+      dataset_name:
+        description: 'Name of the Phoenix dataset to use'
+        type: string
+        required: true
+      pipeline_name:
+        description: 'Name of the pipeline to run'
+        type: choice
+        options:
+          - 'generate-referrals'
+        default: 'generate-referrals'
+        required: true
+      prompt_version_id:
+        description: 'Phoenix Prompt Version ID to use for your experiment (generate-referrals only)'
+        type: string
+        required: false
+
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Run experiment
+      shell: bash
+      working-directory: ./app
+      run: |
+        # Create override.env file used by Docker image
+        {
+          echo "DEPLOYED_PHOENIX_URL=${{ secrets.DEPLOYED_PHOENIX_URL }}"
+          echo "DEPLOYED_PHOENIX_API_KEY=${{ secrets.DEPLOYED_PHOENIX_API_KEY }}"
+          echo "DEPLOYED_API_URL=${{ secrets.DEPLOYED_API_URL }}"
+        } >> override.env
+
+        make run-experiment DATASET="${{ github.event.inputs.dataset_name }}" PIPELINE="${{ github.event.inputs.pipeline_name }}" ACTION="run_on_deployed" PROMPT_VERSION="${{ github.event.inputs.prompt_version_id }}"

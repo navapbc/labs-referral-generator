@@ -1,0 +1,127 @@
+# Use the official python3 image based on Debian 11 "Bullseye".
+# https://hub.docker.com/_/python
+
+# The build stage that will be used to deploy to the various environments
+# needs to be called `release` in order to integrate with the repo's
+# top-level Makefile
+FROM python:3.12-slim AS base
+# See docs for details on upgrading your Python version
+
+# Install poetry, the package manager.
+# https://python-poetry.org
+RUN pip install --no-cache-dir --upgrade pip==25.3 poetry==2.1
+
+RUN apt-get update \
+    # Install security updates
+    # https://pythonspeed.com/articles/security-updates-in-docker/
+    && apt-get upgrade --yes \
+    && apt-get install --no-install-recommends --yes \
+    # Reduce the image size by clear apt cached lists
+    # Complies with https://github.com/codacy/codacy-hadolint/blob/master/codacy-hadolint/docs/description/DL3009.md
+    && rm -rf /var/lib/apt/lists \
+    && rm -f /etc/ssl/private/ssl-cert-snakeoil.key
+
+# The system version of this library in python:3.12-slim contains
+# a vulnerability, so upgrade it
+RUN pip install --no-cache-dir --upgrade urllib3==2.5.0
+
+ARG RUN_UID
+ARG RUN_USER
+
+# The following logic creates the RUN_USER home directory and the directory where
+# we will be storing the application in the image. This runs when the user is not root
+RUN : "${RUN_USER:?RUN_USER and RUN_UID need to be set and non-empty.}" && \
+    [ "${RUN_USER}" = "root" ] || \
+    (useradd --create-home --create --user-group --home "/home/${RUN_USER}" --uid ${RUN_UID} "${RUN_USER}" \
+    && mkdir /app \
+    && chown -R ${RUN_UID} "/home/${RUN_USER}" /app)
+
+#-----------
+# Dev image
+#-----------
+
+FROM base AS dev
+
+ARG RUN_USER
+USER ${RUN_USER}
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock ./
+# Explicitly create a new virtualenv to avoid getting overridden by mounted .venv folders
+RUN poetry config virtualenvs.in-project false && poetry env use python
+# Install all dependencies including dev dependencies
+RUN poetry install --no-root --with dev
+
+COPY . /app
+
+# Using the `truststore` library worked outside of Docker, but did not work inside a Docker container
+# so the current solution is to add the intermediate CA cert to the CA cert file.
+# https://stackoverflow.com/questions/27068163/python-requests-not-handling-missing-intermediate-certificate-only-from-one-mach
+# Append certificate to .../site-packages/certifi/cacert.pem
+RUN CERTIFI_CACERT_FILE=$(poetry run python -c "import certifi; print(certifi.where())") \
+    && [ -f "$CERTIFI_CACERT_FILE" ] && cat certs/local_dev_only_selfsigned_ca_root_cert >> $CERTIFI_CACERT_FILE
+
+ENV HAYHOOKS_PIPELINES_DIR=/app/src/pipelines
+
+# Set the host to 0.0.0.0 to make the server available external
+# to the Docker container that it's running in.
+ENV HOST=0.0.0.0
+
+# Run the application.
+CMD ["poetry", "run", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--workers", "1", "src.app:hayhooks_app", "-b 0.0.0.0:3000"]
+
+
+#---------
+# Release
+#---------
+
+FROM base AS release
+ARG RUN_USER
+
+# Gunicorn requires this workaround to create writable temporary directory in
+# our readonly root file system. https://github.com/aws/containers-roadmap/issues/736
+RUN mkdir -p /tmp
+VOLUME ["/tmp"]
+
+WORKDIR /app
+
+COPY . /app
+
+ENV HAYHOOKS_PIPELINES_DIR=/app/src/pipelines
+
+# Remove any existing virtual environments that might exist. This
+# might happen if testing out building the release image from a local machine
+# that has a virtual environment within the project app folder.
+RUN rm -fr /app/.venv
+
+# Set virtualenv location to be in project to be easy to find
+# This will create a virtualenv in /app/.venv/
+# See https://python-poetry.org/docs/configuration/#virtualenvsin-project
+# See https://python-poetry.org/docs/configuration/#using-environment-variables
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+
+# Install production runtime dependencies only
+RUN poetry install --no-root --only main
+
+# Build the application binary (python wheel) defined in pyproject.toml
+# Note that this will only copy over python files, and files stated in the
+# include section in pyproject.toml. Also note that if you change the name or
+# version section in pyproject.toml, you will need to change the dist/... to match
+# or the application will not build
+RUN poetry build --format wheel && poetry run pip install 'dist/referrals_app-0.1.0-py3-none-any.whl'
+
+# Add project's virtual env to the PATH so we can directly run poetry scripts
+# defined in pyproject.toml
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Set the host to 0.0.0.0 to make the server available external
+# to the Docker container that it's running in.
+ENV HOST=0.0.0.0
+
+# Disable posthog telemetry for ChromaDB (used for RAG) https://docs.trychroma.com/docs/overview/telemetry
+ENV ANONYMIZED_TELEMETRY=False
+
+USER ${RUN_USER}
+
+# Run the application.
+CMD ["poetry", "run", "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "src.app:hayhooks_app", "-b", "0.0.0.0:8000"]

@@ -1,0 +1,57 @@
+name: Restart app in prod
+
+on:
+  schedule:
+    - cron: '0 11 * * *' # every day at 11am UTC
+
+  # Enable manual triggering of the workflow
+  workflow_dispatch:
+
+jobs:
+
+  force_reboot:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: ./.github/actions/setup-terraform
+
+      - name: Configure AWS credentials
+        uses: ./.github/actions/configure-aws-credentials
+        with:
+          app_name: app
+          environment: prod
+
+      - name: Force AWS app service to restart
+        run: |
+          set -e
+
+          echo "Forcing new deployment of app-prod service in app-prod cluster..."
+          aws ecs update-service --cluster app-prod --service app-prod --force-new-deployment
+          echo "Started new task...(this can take about 5-10 minutes to complete, depending on the number of files in S3 to ingest into the RAG database)"
+
+          echo "Waiting for 'UNHEALTHY' service to stabilize..."
+          for i in $(seq 1 5); do
+              sleep 30
+              echo "Current tasks:"
+              # shellcheck disable=SC2046
+              aws ecs describe-tasks --cluster app-prod --tasks $(aws ecs list-tasks --cluster app-prod --query 'taskArns[]' --output text) --query "tasks[].[taskArn, createdAt, lastStatus, healthStatus]" --output table
+
+              if aws ecs wait services-stable --cluster app-prod --service app-prod; then
+                echo "Service stabilized"
+                break
+              else
+                echo "Waiting attempt $i timed out. Retrying in 30 seconds..."
+              fi
+          done
+
+
+          echo "Current tasks:"
+          # shellcheck disable=SC2046
+          aws ecs describe-tasks --cluster app-prod --tasks $(aws ecs list-tasks --cluster app-prod --query 'taskArns[]' --output text) --query "tasks[].[taskArn, createdAt, lastStatus, healthStatus]" --output table

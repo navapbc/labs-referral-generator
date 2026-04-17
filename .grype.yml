@@ -1,0 +1,29 @@
+# List of vulnerabilities to ignore for the anchore scan
+# https://github.com/anchore/grype#specifying-matches-to-ignore
+# More info can be found in the docs/infra/vulnerability-management.md file
+
+# Please add safelists in the following format to make it easier when checking
+# Package/module name: URL to vulnerability for checking updates
+#  Versions:     URL to the version history
+#  Dependencies: Name of any other packages or modules that are dependent on this version
+#                 Link to the dependencies for ease of checking for updates
+#  Issue:         Why there is a finding and why this is here or not been removed
+#  Last checked:  Date last checked in scans
+# - vulnerability: The-CVE-or-vuln-id # Remove comment at start of line
+
+ignore:
+  # These settings ignore any findings that fall into these categories
+  - fix-state: not-fixed
+  - fix-state: wont-fix
+  - fix-state: unknown
+  # https://github.com/anchore/grype/issues/1172
+  - vulnerability: GHSA-xqr8-7jwr-rhp7
+  # These have been backported to Python 3.12.11, but not yet
+  # updated in the grype database
+  # See: https://security.snyk.io/package/linux/chainguard:latest/python-3.12
+  - vulnerability: CVE-2025-8194
+  - vulnerability: CVE-2025-6069
+  # We updated our Dockerfile to use a new version of Pip, but Grype
+  # doesn't recognize it
+  # TODO: Revisit in future to check if Grype recognizes new version of Pip
+  - vulnerability: GHSA-4xh5-x5gv-qwph

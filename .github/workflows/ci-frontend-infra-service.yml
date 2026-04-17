@@ -1,0 +1,84 @@
+name: CI Infra Service Checks - frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - infra/frontend/service/**
+      - infra/modules/**
+      - infra/test/**
+      - .github/workflows/ci-frontend-infra-service.yml
+  pull_request:
+    paths:
+      - infra/frontend/service/**
+      - infra/modules/**
+      - infra/test/**
+      - .github/workflows/ci-frontend-infra-service.yml
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        default: "main"
+        description: Tag or branch or SHA to test
+
+jobs:
+  preflight:
+    # Skip downstream jobs when the repo has no AWS backend config committed
+    # (e.g. a freshly-templated copy). Once an adopter runs bin/create-tfbackend
+    # and commits the resulting .s3.tfbackend files, these checks start running.
+    name: Check infra is configured
+    runs-on: ubuntu-latest
+    outputs:
+      configured: ${{ steps.check.outputs.configured }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          if ls infra/accounts/*.s3.tfbackend >/dev/null 2>&1 && [ -f infra/frontend/service/dev.s3.tfbackend ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipping infra service checks — no backend config files found. See infra/README.md to set up your AWS account."
+          fi
+
+  build-and-publish:
+    name: Build
+    needs: preflight
+    if: needs.preflight.outputs.configured == 'true'
+    uses: ./.github/workflows/build-and-publish.yml
+    with:
+      app_name: frontend
+      ref: ${{ inputs.version || github.ref }}
+
+  infra-test-e2e:
+    name: Test service
+    runs-on: ubuntu-latest
+    needs: [preflight, build-and-publish]
+    if: needs.preflight.outputs.configured == 'true'
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version || github.ref }}
+
+      - name: Set up Terraform
+        uses: ./.github/actions/setup-terraform
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: "infra/test/go.mod"
+
+      - name: Configure AWS credentials
+        uses: ./.github/actions/configure-aws-credentials
+        with:
+          app_name: frontend
+          # Run infra CI on dev environment
+          environment: dev
+
+      - name: Run Terratest
+        run: make infra-test-service APP_NAME=frontend

@@ -1,0 +1,44 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "2025-01-21-example.md"
+    },
+    {
+      "pattern": "localhost"
+    },
+    {
+      "pattern": "127.0.0.1"
+    },
+    {
+        "pattern": "https://navalabs.atlassian.net/browse/DST-"
+    },
+    {
+      "pattern": "https://www.terraform.io"
+    },
+    {
+      "pattern": "https://developer.hashicorp.com/"
+    },
+    {
+      "pattern": "https://www.figma.com/community/file/"
+    },
+    {
+      "pattern": "https://nextjs.org/docs/"
+    },
+    {
+      "pattern": "https://remix.run/docs/"
+    },
+    {
+      "pattern": "https://18f.gsa.gov/"
+    },
+    {
+      "pattern": "https://www.npmjs.com/package/jest-axe"
+    }
+  ],
+  "replacementPatterns": [
+    {
+      "pattern": "^/",
+      "replacement": "{{BASEURL}}/"
+    }
+  ],
+  "retryOn429": true
+}

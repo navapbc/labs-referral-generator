@@ -1,0 +1,37 @@
+name: Deploy app
+# Need to set a default value for when the workflow is triggered from a git push
+# which bypasses the default configuration for inputs
+run-name: Deploy ${{inputs.version || 'main' }} to app ${{ inputs.environment || 'dev' }}
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "app/**"
+      - "bin/**"
+      - "infra/**"
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        default: "dev"
+        type: choice
+        options:
+          - dev
+          - prod
+      version:
+        required: true
+        default: "main"
+        description: Tag or branch or SHA to deploy
+
+jobs:
+  deploy:
+    name: " " # GitHub UI is noisy when calling reusable workflows, so use whitespace for name to reduce noise
+    uses: ./.github/workflows/deploy.yml
+    with:
+      app_name: "app"
+      environment: ${{ inputs.environment || 'dev' }}
+      version: ${{ inputs.version || 'main' }}
+    secrets: inherit

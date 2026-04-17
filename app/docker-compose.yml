@@ -1,0 +1,82 @@
+services:
+  app-db:
+    image: postgres:16-alpine
+    command: postgres -c "log_lock_waits=on" -N 1000 -c "fsync=off"
+    environment:
+      POSTGRES_PASSWORD: secret123
+      # Set user to app to match user from template-infra (https://github.com/navapbc/template-infra)
+      # This is also needed for the initial migration that alters defaut privileges to grant
+      # table privileges to the app user (see src/db/migrations/versions/2023_08_10_default_table_privileges.py)
+      POSTGRES_USER: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - app-dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phoenix:
+    image: arizephoenix/phoenix:version-10.9.1-nonroot
+    depends_on:
+      app-db:
+        condition: service_healthy
+    ports:
+      - "6006:6006" # UI and OTLP HTTP collector
+      # - "4317:4317" # OTLP gRPC collector
+    environment:
+      - PHOENIX_SQL_DATABASE_URL=postgresql://app:secret123@app-db:5432/postgres
+
+      # https://arize.com/docs/phoenix/release-notes/04.2025/04.28.2025-tls-support-for-phoenix-server
+      - PHOENIX_TLS_ENABLED=False
+      # The following applies when PHOENIX_TLS_ENABLED=True
+      - PHOENIX_TLS_CERT_FILE=/certs/server-fullchain.crt
+      # Server's private key
+      - PHOENIX_TLS_KEY_FILE=/certs/server.key
+      # For local dev, no password set for the server's private key
+      - PHOENIX_TLS_KEY_FILE_PASSWORD=
+      # For verifying client certificates
+      - PHOENIX_TLS_VERIFY_CLIENT=False
+
+      # See README.md to enable authentication (sign-in screen) locally
+      # - PHOENIX_ENABLE_AUTH=True
+      # - PHOENIX_SECRET=ThisSecretIsForLocalDevOnly202508251033
+    volumes:
+      - ./certs:/certs
+
+  chromadb:
+    image: chromadb/chroma
+    ports:
+      - "8000:8000"
+    environment:
+      # opt out of telemetry -- https://docs.trychroma.com/docs/overview/telemetry
+      - ANONYMIZED_TELEMETRY=False
+    volumes:
+      - chroma_data:/data
+
+  app:
+    build:
+      context: ./
+      target: dev
+      args:
+        - RUN_UID=${RUN_UID:-4000}
+        - RUN_USER=${RUN_USER:-app}
+    ports:
+      # For Hayhooks
+      - "3000:3000"
+    volumes:
+      - ./:/app
+    env_file:
+      - path: ./local.env
+        required: true
+      - path: ./override.env
+        required: false
+    depends_on:
+      app-db:
+        condition: service_healthy
+
+volumes:
+  app-dbdata:
+  chroma_data:
