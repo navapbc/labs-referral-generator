@@ -315,7 +315,7 @@ export default function TestPage() {
                           Find Resources{" "}
                         </h2>
                         <p className="text-blue-600 font-medium">
-                          GenAI Referral Generator
+                          Referral Generator
                         </p>
                       </div>
                     </div>

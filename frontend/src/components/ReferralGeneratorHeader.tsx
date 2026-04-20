@@ -13,7 +13,7 @@ export function ReferralGeneratorHeader() {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Find Resources</h2>
-          <p className="text-blue-600 font-medium">GenAI Referral Generator</p>
+          <p className="text-blue-600 font-medium">Referral Generator</p>
         </div>
       </div>
     </div>

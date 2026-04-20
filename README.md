@@ -1,29 +1,54 @@
-# GenAI Referral Generator
+# Referral Generator
 
-*AI-assisted resource referral and action planning for case managers.*
+**An open-source AI tool that helps case managers make resource referrals and action plans for their clients.**
 
-## Table of Contents
+Built by [Nava Labs](https://www.navapbc.com/labs/ai-tools-public-benefits), a division of [Nava PBC](https://www.navapbc.com).
 
-- [Product Description](#product-description)
-- [Components](#components)
-- [Setup](#setup)
-  - [Backend (app)](#backend-app)
-  - [Frontend](#frontend)
-- [Usage Examples](#usage-examples)
-- [Contact](#contact)
-- [Open Source](#open-source)
+**[About](#about)** · **[Features](#features)** · **[Components](#components)** · **[Setup](#setup)** · **[Contributing](#contributing)** · **[License](#license)**
 
 ---
 
-## Product Description
+## About
 
-The GenAI Referral Generator is a pilot application developed by Nava Labs, a research and development team within Nava PBC.  It assists case managers in identifying relevant community resources and generating personalized action plans for clients. Case managers enter client information into the tool, which uses a Retrieval-Augmented Generation (RAG) pipeline and a large language model to surface trusted resources and create a tailored action plan. Results can be printed or emailed directly to clients.
+Referrals are a core part of benefits navigation. Case managers are responsible for identifying services that are relevant, accessible, and appropriate. But this process can be slow, inconsistent, and reliant on personal knowledge or static documents that may be outdated and/or difficult to access. This tool leverages generative AI to assist case managers in identifying relevant community resources and generating personalized action plans for clients. Case managers enter client information into the tool, which uses a Retrieval-Augmented Generation (RAG) pipeline and a large language model to surface trusted resources and create a tailored action plan. Results can be printed or emailed directly to clients.
 
-The GenAI Referral Generator demonstrates the effectiveness of LLMs at identifying relevant resources, and allows you to evaluate the accuracy of identifying prerequisite steps and constraints relevant to case managers' clients.
+The [Referral Generator](https://www.navapbc.com/labs/caseworker-ai-tools/referral-generator) is a  part of Nava Labs' broader [Caseworker Empowerment Toolkit](https://www.caseworker.navapbc.com). 
+
+**Initial development and piloting:**
+
+The Referral Generator was initially developed with funding from the Gates Foundation, in partnership with [Goodwill Central Texas](https://www.goodwillcentraltexas.org/) and [Goodwill Keystone Area](https://www.yourgoodwill.org/). 68 staff members in public-facing roles across these two regional Goodwill affiliates tested the tool in a 4-month pilot period running November 2025 to February 2026, with pilot results showing promising signal of reducing administrative burden. Nava Labs is sharing findings from development and piloting in regular Demo Days:
+- [Developing a Referral Generator for Case Managers](https://www.navapbc.com/events/nava-labs-demo-day-6)
+
+**Who this is for:**
+
+- **Caseworkers and benefit navigators** who help clients find programs and resources to address their needs
+- **Government agencies and social services organizations** developing AI tools for their workforce
+- **Developers** looking to build or adapt AI-assisted casework tools for their context
 
 ---
 
-### Components
+## Features
+
+- **Resource search across internal materials and web sources** — Identifies relevant resources based on a given client scenario, drawing from the organization's priority sources along with information from the web
+- **Referral list** — Summarizes key information about relevant resources 
+- **Action planning** — Generates detailed action plans to guide the client through necessary steps to access the resource
+- **Email and print** - Easy options to share referrals and action plans with clients
+- **Flexible AI model support** — works with multiple LLM providers
+
+The following describes a typical end-to-end session for a case manager using the Referral Generator.
+
+1. **Open the tool** — Navigate to the application in a browser. A login form will show. In the template configuration there is no authentication, and the form merely captures user information which is used in evaluations and application tracing
+2. **Enter client information** — Fill out the intake form with details such as the client's employment goals, barriers to employment, and location. The UI components are designed to structure this input in a way that automatically enriches the LLM prompt, reducing the need for case managers to manually phrase queries.
+3. **Generate referrals** — Submit the form to trigger the RAG pipeline. The tool retrieves relevant resources from the knowledge base and passes them along with the client context to the LLM, which returns a structured list of community resources.
+4. **Review resources** — Browse the returned resource list. Each resource includes relevant details to help the case manager assess fit for the client.
+5. **Generate an action plan** — With resources selected, request an action plan. The LLM uses the client information and resource list to produce a personalized, step-by-step plan that accounts for prerequisite steps and constraints specific to the client's situation.
+6. **Share results** — Print the referral list and action plan as a PDF, or email them directly to the client or relevant parties.
+
+[Demonstration Video](https://drive.google.com/file/d/1-h1UXtbFssYFsl6or0bE6PCFGXO7WOXS/view?usp=sharing)
+
+---
+
+## Components
 
 | Component | Technology | AWS Service | Role                                                                                                                     |
 |---|---|---|--------------------------------------------------------------------------------------------------------------------------|
@@ -52,31 +77,24 @@ See [docs/app/getting-started.md](docs/app/getting-started.md) for full setup in
 See [frontend/README.md](frontend/README.md) for full setup instructions.
 
 ---
+## Contributing
 
-## Usage Examples
+We welcome contributions from the community — whether you're fixing a bug, suggesting a feature, or improving documentation.
 
-The following describes a typical end-to-end session for a case manager using the GenAI Referral Generator.
+Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a pull request. All contributors are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-1. **Open the tool** — Navigate to the application in a browser. A login screen will show. There is no authentication, this is merely to capture user information which is used in evaluations and application tracing
-2. **Enter client information** — Fill out the intake form with details such as the client's employment goals, barriers to employment, and location. The UI components are designed to structure this input in a way that automatically enriches the LLM prompt, reducing the need for case managers to manually phrase queries.
-3. **Generate referrals** — Submit the form to trigger the RAG pipeline. The tool retrieves relevant resources from the knowledge base and passes them along with the client context to the LLM, which returns a structured list of community resources.
-4. **Review resources** — Browse the returned resource list. Each resource includes relevant details to help the case manager assess fit for the client.
-5. **Generate an action plan** — With resources selected, request an action plan. The LLM uses the client information and resource list to produce a personalized, step-by-step plan that accounts for prerequisite steps and constraints specific to the client's situation.
-6. **Share results** — Print the referral list and action plan as a PDF, or email them directly to the client or relevant parties.
-
-[Demonstration Video](https://drive.google.com/file/d/1-h1UXtbFssYFsl6or0bE6PCFGXO7WOXS/view?usp=sharing)
+For security-related issues, please review our [Security Policy](SECURITY.md) before disclosing publicly.
 
 ---
 
-## Contact
+## License
 
-For questions about this project, reach out to the Nava Labs team at [labs-dst@navapbc.com](mailto:labs-dst@navapbc.com).
+This project is licensed under the [Apache License 2.0](LICENSE). You are free to use, modify, and distribute this software in accordance with the license terms.
 
 ---
 
-## Open Source
+## About Nava
 
-This project is made available as open source for future research purposes and extension. It was developed by [Nava PBC](https://www.navapbc.com) in partnership with Goodwill.
-The initial research pilot started in August 2025 and the Pilot usage ended in Early March 2026.
+[Nava PBC](https://www.navapbc.com) partners with government agencies to design and build simple, effective digital services. As a public benefit corporation, we're accountable to our mission: making it easier for people to access the services they need.
 
-Contributions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before participating. Security issues should be reported privately per our [Security Policy](SECURITY.md).
+[Nava Labs](https://www.navapbc.com/labs) uses philanthropic funding to prototype safety-net innovations that government agencies need but can’t fund directly. We build and test new approaches to delivering public services, evaluate what works, and advocate for scaling proven solutions.
