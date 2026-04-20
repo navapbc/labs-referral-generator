@@ -26,7 +26,7 @@ interface LayoutProps {
 }
 
 export const metadata: Metadata = {
-  title: "GenAI Referral Generator",
+  title: "Referral Generator",
   description: "AI-powered referral and resource discovery tool",
   icons: {
     icon: "/img/logo.svg",
