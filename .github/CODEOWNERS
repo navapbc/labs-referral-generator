@@ -1,0 +1,7 @@
+# CODEOWNERS for labs-referral-generator
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# These owners will be the default owners for everything in the repo.
+# Order matters: the last matching pattern takes precedence.
+
+* @navapbc/nava-labs-engineering
