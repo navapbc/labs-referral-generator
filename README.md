@@ -12,7 +12,7 @@ Built by [Nava Labs](https://www.navapbc.com/labs/ai-tools-public-benefits), a d
 
 Referrals are a core part of benefits navigation. Case managers are responsible for identifying services that are relevant, accessible, and appropriate. But this process can be slow, inconsistent, and reliant on personal knowledge or static documents that may be outdated and/or difficult to access. This tool leverages generative AI to assist case managers in identifying relevant community resources and generating personalized action plans for clients. Case managers enter client information into the tool, which uses a Retrieval-Augmented Generation (RAG) pipeline and a large language model to surface trusted resources and create a tailored action plan. Results can be printed or emailed directly to clients.
 
-The [Referral Generator](https://www.navapbc.com/labs/caseworker-ai-tools/referral-generator) is a  part of Nava Labs' broader [Caseworker Empowerment Toolkit](https://www.caseworker.navapbc.com). 
+The [Referral Generator](https://www.navapbc.com/labs/caseworker-ai-tools/referral-generator) is a  part of Nava Labs' broader [Caseworker Empowerment Toolkit](https://caseworker.navapbc.com). 
 
 **Initial development and piloting:**
 
