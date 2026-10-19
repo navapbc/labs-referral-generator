@@ -1,0 +1,27 @@
+# Keep local-only and generated files out of the Docker build context.
+# In development, docker-compose mounts ./app over /app, so these are still
+# available inside the dev container.
+
+# Local secrets; deployed environments get config from environment variables
+.env
+.envrc
+override.env
+docker-compose.override.yml
+
+# Virtualenvs, build output, and caches
+.venv
+dist
+*.egg-info
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.mypy_cache
+.testmondata
+.coverage*
+coverage.*
+htmlcov
+
+# Local data: RAG source files, ChromaDB data, experiment datasets
+files_to_ingest_into_vector_db
+chroma_data
+dataset.csv

@@ -3,8 +3,10 @@
 # DOCKLE_ACCEPT_FILES=file1,path/to/file2,file3/path,etc
 # https://github.com/goodwithtech/dockle#accept-suspicious-environment-variables--files--file-extensions
 
-# Hayhooks has an out of the box example and it uses a settings file, we don't need or use it but need to ignore it
-DOCKLE_ACCEPT_FILES=app/.venv/lib/python3.12/site-packages/hayhooks/settings.py,app/.venv/lib/python3.12/site-packages/phoenix/otel/settings.py,app/.venv/lib/python3.12/site-packages/phoenix/settings.py,app/.venv/lib/python3.12/site-packages/scipy/_lib/cobyqa/settings.py,app/.venv/lib/python3.12/site-packages/docx/oxml/settings.py,app/.venv/lib/python3.12/site-packages/htmldate/settings.py,app/.venv/lib/python3.12/site-packages/docx/parts/settings.py,app/.venv/lib/python3.12/site-packages/courlan/settings.py,app/.venv/lib/python3.12/site-packages/docx/settings.py,app/.venv/lib/python3.12/site-packages/trafilatura/settings.py,app/.venv/lib/python3.12/site-packages/dateparser_data/settings.py
+# settings.py: library modules in the virtualenv (hayhooks, phoenix, scipy, python-docx,
+# trafilatura, ...) named settings.py, which Dockle flags by filename only. Matching on the
+# filename keeps this working across Python version upgrades.
+DOCKLE_ACCEPT_FILES=settings.py
 
 # python:3.12-slim doesn't clear package caches after apt-get install; we do so in our own Dockerfile
 DOCKLE_IGNORES=DKL-DI-0005
