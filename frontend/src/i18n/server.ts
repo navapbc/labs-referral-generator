@@ -1,6 +1,7 @@
+import { hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
 
-import { formats, timeZone } from "./config";
+import { defaultLocale, formats, locales, timeZone } from "./config";
 import { getMessagesWithFallbacks } from "./getMessagesWithFallbacks";
 
 /**
@@ -9,7 +10,9 @@ import { getMessagesWithFallbacks } from "./getMessagesWithFallbacks";
  * @see https://next-intl-docs.vercel.app/docs/usage/configuration#nextconfigjs
  */
 export default getRequestConfig(async ({ requestLocale }) => {
-  const locale = await requestLocale;
+  // Unsupported or missing locales fall back to the default locale
+  const requested = await requestLocale;
+  const locale = hasLocale(locales, requested) ? requested : defaultLocale;
   return {
     formats,
     locale,

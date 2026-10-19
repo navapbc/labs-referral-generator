@@ -4,8 +4,10 @@
  */
 import type React from "react";
 import type { Metadata } from "next";
+import { hasLocale } from "next-intl";
 import { Geist, Geist_Mono } from "next/font/google";
 import Layout from "src/components/Layout";
+import { defaultLocale, locales } from "src/i18n/config";
 import "@/app/globals.css";
 
 const geistSans = Geist({
@@ -34,7 +36,8 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children, params }: LayoutProps) {
-  const { locale } = await params;
+  const { locale: requested } = await params;
+  const locale = hasLocale(locales, requested) ? requested : defaultLocale;
   return (
     <html
       lang={locale}
