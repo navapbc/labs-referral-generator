@@ -14,7 +14,7 @@ defaults:
     working-directory: ./frontend
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 22
   LOCKFILE_PATH: ./frontend/package-lock.json # or yarn.lock
   PACKAGE_MANAGER: npm # or yarn
 
