@@ -8,5 +8,5 @@
 # filename keeps this working across Python version upgrades.
 DOCKLE_ACCEPT_FILES=settings.py
 
-# python:3.12-slim doesn't clear package caches after apt-get install; we do so in our own Dockerfile
+# python:3.13-slim doesn't clear package caches after apt-get install; we do so in our own Dockerfile
 DOCKLE_IGNORES=DKL-DI-0005
