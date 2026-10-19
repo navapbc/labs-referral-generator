@@ -1,7 +1,7 @@
 # This file is largely based on the template-application-flask Dockerfile and
 # Next.js Docker example: https://github.com/vercel/next.js/blob/canary/examples/with-docker-compose
 # =============================================================================
-FROM node:20.20.0-bookworm-slim AS base
+FROM node:22.23.3-bookworm-slim AS base
 WORKDIR /app
 
 # Install dependencies
@@ -59,7 +59,7 @@ RUN npm run build -- --no-lint
 # Run the Next.js server
 # =====================================
 # Use clean image for release, excluding any unnecessary files or dependencies
-FROM node:20.20.0-bookworm-slim AS release
+FROM node:22.23.3-bookworm-slim AS release
 WORKDIR /app
 
 # Pinning apt package versions breaks the build whenever Debian drops old versions;
