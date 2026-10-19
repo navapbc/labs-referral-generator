@@ -11,7 +11,7 @@
 #   dev     - poetry + dev dependencies (docker-compose)
 #   builder - poetry + the production virtualenv in /app/.venv
 #   release - base + the virtualenv and app code from builder; no poetry
-FROM python:3.12-slim AS base
+FROM python:3.13-slim AS base
 # See docs for details on upgrading your Python version
 
 RUN apt-get update \
@@ -45,7 +45,7 @@ FROM base AS poetry
 
 # Install poetry, the package manager.
 # https://python-poetry.org
-RUN pip install --no-cache-dir poetry==2.1
+RUN pip install --no-cache-dir poetry==2.3.4
 
 #-----------
 # Dev image
@@ -73,6 +73,10 @@ RUN CERTIFI_CACERT_FILE=$(poetry run python -c "import certifi; print(certifi.wh
     && [ -f "$CERTIFI_CACERT_FILE" ] && cat certs/local_dev_only_selfsigned_ca_root_cert >> "$CERTIFI_CACERT_FILE"
 
 ENV HAYHOOKS_PIPELINES_DIR=/app/src/pipelines
+# Deploy pipelines one at a time, as hayhooks 1.x did. hayhooks 2's default
+# "parallel" strategy intermittently fails to load pipeline modules with
+# "dictionary changed size during iteration", leaving workers without pipelines.
+ENV HAYHOOKS_STARTUP_DEPLOY_STRATEGY=sequential
 
 # Set the host to 0.0.0.0 to make the server available external
 # to the Docker container that it's running in.
@@ -127,6 +131,10 @@ COPY prompts ./prompts
 COPY gunicorn.conf.py ./
 
 ENV HAYHOOKS_PIPELINES_DIR=/app/src/pipelines
+# Deploy pipelines one at a time, as hayhooks 1.x did. hayhooks 2's default
+# "parallel" strategy intermittently fails to load pipeline modules with
+# "dictionary changed size during iteration", leaving workers without pipelines.
+ENV HAYHOOKS_STARTUP_DEPLOY_STRATEGY=sequential
 
 # Add project's virtual env to the PATH so we can directly run poetry scripts
 # defined in pyproject.toml
