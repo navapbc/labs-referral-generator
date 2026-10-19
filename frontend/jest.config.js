@@ -22,4 +22,14 @@ const customJestConfig = {
   },
 };
 
-module.exports = createJestConfig(customJestConfig);
+// next-intl 4, use-intl, and their formatting dependencies ship ESM only, so Jest
+// needs to transform them.
+// next/jest sets transformIgnorePatterns itself, so override it after the config is built.
+module.exports = async () => {
+  const config = await createJestConfig(customJestConfig)();
+  config.transformIgnorePatterns = [
+    "/node_modules/(?!(next-intl|use-intl|@formatjs|intl-messageformat|icu-minify)/)",
+    "^.+\\.module\\.(css|sass|scss)$",
+  ];
+  return config;
+};

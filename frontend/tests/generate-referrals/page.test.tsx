@@ -61,7 +61,7 @@ describe("Generate Referrals Page", () => {
       .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
       .mockImplementation((_req, _email, onChunk, onComplete) => {
         // Simulate streaming chunks
-        onChunk(mockResources as Partial<Resource>[]);
+        onChunk(mockResources);
         onComplete();
         return Promise.resolve(mockFetchResourcesResult);
       });
@@ -274,7 +274,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -320,7 +320,7 @@ describe("Generate Referrals Page", () => {
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
           // Simulate streaming behavior
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -375,7 +375,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -425,7 +425,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -459,7 +459,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -530,7 +530,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -570,7 +570,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -602,7 +602,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -634,7 +634,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -698,7 +698,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -759,7 +759,7 @@ describe("Generate Referrals Page", () => {
       const fetchResourcesStreamingSpy = jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -824,7 +824,7 @@ describe("Generate Referrals Page", () => {
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation(async (_req, _email, onChunk, onComplete) => {
           await searchPromise;
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return mockFetchResourcesResult;
         });
@@ -856,7 +856,7 @@ describe("Generate Referrals Page", () => {
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation(async (_req, _email, onChunk, onComplete) => {
           await refineSearchPromise;
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return mockFetchResourcesResult;
         });
@@ -888,7 +888,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -968,7 +968,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -1024,7 +1024,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -1065,7 +1065,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockResources as Partial<Resource>[]);
+          onChunk(mockResources);
           onComplete();
           return Promise.resolve(mockFetchResourcesResult);
         });
@@ -1134,7 +1134,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockMultipleResources as Partial<Resource>[]);
+          onChunk(mockMultipleResources);
           onComplete();
           return Promise.resolve({
             resultId: "test-result-id",
@@ -1207,7 +1207,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockMultipleResources as Partial<Resource>[]);
+          onChunk(mockMultipleResources);
           onComplete();
           return Promise.resolve({
             resultId: "test-result-id",
@@ -1291,7 +1291,7 @@ describe("Generate Referrals Page", () => {
       jest
         .spyOn(fetchResourcesStreamingModule, "fetchResourcesStreaming")
         .mockImplementation((_req, _email, onChunk, onComplete) => {
-          onChunk(mockMultipleResources as Partial<Resource>[]);
+          onChunk(mockMultipleResources);
           onComplete();
           return Promise.resolve({
             resultId: "test-result-id",

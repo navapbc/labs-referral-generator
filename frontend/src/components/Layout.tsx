@@ -1,8 +1,9 @@
 import { NextIntlClientProvider } from "next-intl";
+import type { Locale } from "src/i18n/config";
 
 type Props = {
   children: React.ReactNode;
-  locale?: string;
+  locale?: Locale;
 };
 
 const Layout = ({ children, locale }: Props) => {

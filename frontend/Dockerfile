@@ -62,12 +62,15 @@ RUN npm run build -- --no-lint
 FROM node:20.20.0-bookworm-slim AS release
 WORKDIR /app
 
+# Pinning apt package versions breaks the build whenever Debian drops old versions;
+# we rely on `apt-get upgrade` and the weekly vulnerability scans instead.
+# hadolint ignore=DL3008
 RUN apt-get update \
     # Install security updates
     # https://pythonspeed.com/articles/security-updates-in-docker/
     && apt-get upgrade --yes \
     # Install wget, required for health checks
-    wget \
+    && apt-get install --no-install-recommends --yes wget \
     # Reduce the image size by clearing apt cached lists
     && rm -fr /var/lib/apt/lists/* \
     # Release stage doesn't have a need for `npm`, so remove it to avoid
