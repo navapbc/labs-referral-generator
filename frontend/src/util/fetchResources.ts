@@ -1,5 +1,5 @@
 import { Resource, ResourcesSchema } from "@/types/resources";
-import { getApiDomain } from "./apiDomain";
+import { hayhooksUrl } from "./hayhooksUrl";
 import { GenerateReferralsResponse } from "@/types/api";
 
 export async function fetchResources(
@@ -8,14 +8,12 @@ export async function fetchResources(
   prompt_version_id: string | null,
   suffix?: string,
 ) {
-  const apiDomain = await getApiDomain();
-
   const useNonRag = process.env.NEXT_PUBLIC_USE_NONRAG === "true";
   const url_path = useNonRag
     ? "generate_referrals/run"
     : "generate_referrals_rag/run";
 
-  const url = apiDomain + url_path;
+  const url = hayhooksUrl(url_path);
   const headers = {
     "Content-Type": "application/json",
   };

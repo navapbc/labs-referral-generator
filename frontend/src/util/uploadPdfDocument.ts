@@ -1,5 +1,5 @@
 import { Resource, ResourcesSchema } from "@/types/resources";
-import { getApiDomain } from "./apiDomain";
+import { hayhooksUrl } from "./hayhooksUrl";
 import { GenerateReferralsFromDocResponse } from "@/types/api";
 import { STREAMING_TIMEOUT } from "@/config/timeouts";
 
@@ -40,8 +40,7 @@ export async function uploadPdfDocument(
   userEmail: string,
   file: File,
 ): Promise<Resource[]> {
-  const apiDomain = await getApiDomain();
-  const url = apiDomain + "generate_referrals_from_doc/run";
+  const url = hayhooksUrl("generate_referrals_from_doc/run");
 
   const formData = new FormData();
   formData.append("files", file);

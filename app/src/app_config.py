@@ -25,6 +25,10 @@ class AppConfig(PydanticBaseEnvConfig):
     host: str = "127.0.0.1"
     port: int = 3000
 
+    # Shared secret callers must send as `Authorization: Bearer <token>`.
+    # The app refuses to start without it; see src/auth.py.
+    api_auth_token: str | None = None
+
     phoenix_collector_endpoint: str = "https://phoenix:6006"
     batch_otel: bool = True
 

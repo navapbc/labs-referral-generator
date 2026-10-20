@@ -52,6 +52,8 @@ def precision(output: TaskOutput, expected: Dict[str, Any]) -> float:
 
 
 url_base = os.environ.get("DEPLOYED_API_URL")
+# API_AUTH_TOKEN of the deployed environment, not the local one
+url_token = os.environ.get("DEPLOYED_API_AUTH_TOKEN")
 if url_base:
     logger.info("Using deployed API at %s", url_base)
 
@@ -97,12 +99,14 @@ def query_api(example: dict) -> TaskOutput:
     logger.info("Getting answer for: %r", question)
 
     assert url_base, "DEPLOYED_API_URL is not set -- add it to override.env"
+    assert url_token, "DEPLOYED_API_AUTH_TOKEN is not set -- add it to override.env"
     json_data = {"query": question, "prompt_version_id": prompt_version or ""}
     response = requests.post(
         f"{url_base}/{PIPELINES[pipeline_name]['url_path']}",
         headers={
             "accept": "application/json",
             "Content-Type": "application/json",
+            "Authorization": f"Bearer {url_token}",
         },
         json=json_data,
         timeout=60,

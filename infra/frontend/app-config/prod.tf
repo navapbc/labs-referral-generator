@@ -25,6 +25,6 @@ module "prod_config" {
   # enable_command_execution = true
 
   service_override_extra_environment_variables = {
-    NEXT_PUBLIC_API_BASE_URL = "" # TODO Update with your PRODUCTION API base URL
+    API_BASE_URL = "" # TODO Update with your PRODUCTION API base URL
   }
 }
