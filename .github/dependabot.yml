@@ -1,0 +1,103 @@
+# Dependabot version and security updates
+# https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference
+#
+# - Weekly, on Mondays, alongside the weekly vulnerability scans
+# - Minor and patch updates are grouped into one PR per ecosystem; major
+#   updates get their own PRs so one breaking change doesn't block the rest
+# - Security updates are grouped separately and aren't held by the cooldown
+# - The cooldown waits for a release to age a few days before proposing it,
+#   which limits exposure to a compromised or yanked release
+
+version: 2
+
+updates:
+  - package-ecosystem: "pip" # poetry.lock
+    directory: "/app"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      default-days: 3
+      semver-major-days: 14
+    groups:
+      python-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
+      python-security:
+        applies-to: security-updates
+        patterns: ["*"]
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      default-days: 3
+      semver-major-days: 14
+    groups:
+      npm-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
+      npm-security:
+        applies-to: security-updates
+        patterns: ["*"]
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "npm"
+    directory: "/e2e"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      default-days: 3
+      semver-major-days: 14
+    ignore:
+      # Must match the mcr.microsoft.com/playwright image in e2e/Dockerfile;
+      # bump both together by hand
+      - dependency-name: "@playwright/test"
+    groups:
+      e2e-minor-patch:
+        applies-to: version-updates
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
+      e2e-security:
+        applies-to: security-updates
+        patterns: ["*"]
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "docker"
+    directories:
+      - "/app"
+      - "/frontend"
+      - "/e2e"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      default-days: 3
+    ignore:
+      # Language version upgrades are deliberate PRs (dependency and CI
+      # compatibility); Dependabot still bumps patch versions within a line
+      - dependency-name: "python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
+      # Must match @playwright/test in e2e/package.json; bump both together by hand
+      - dependency-name: "*playwright"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "github-actions"
+    directory: "/" # reads .github/workflows and .github/actions
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    cooldown:
+      default-days: 3
+    groups:
+      github-actions:
+        patterns: ["*"]
+    open-pull-requests-limit: 5
