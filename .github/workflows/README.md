@@ -2,6 +2,17 @@
 
 The CI/CD for this project uses [reusable Github Actions workflows](https://docs.github.com/en/actions/using-workflows/reusing-workflows).
 
+> [!NOTE]
+> This repo is published as open source and is not deployed to AWS. Workflows that
+> deploy, publish images to Amazon ECR, or otherwise run against AWS are disabled by
+> renaming them to `*.yml.disabled`: `cd-app`, `cd-frontend`, `ci-app-infra-service`,
+> `ci-frontend-infra-service`, `ci-app-pr-environment-checks`,
+> `ci-frontend-pr-environment-checks`, `ci-app-pr-environment-destroy`,
+> `ci-frontend-pr-environment-destroy`, `check-ci-cd-auth`, `check-infra-deploy-status`,
+> `restart-app`, and `scan-orphaned-environments`. The reusable `build-and-publish`
+> workflow no longer has a manual `workflow_dispatch` trigger, so nothing pushes images
+> to ECR. To re-enable a workflow, drop the `.disabled` suffix.
+
 ## 🧪 CI
 
 ### Per app workflows
