@@ -58,4 +58,4 @@ graph TD
 
 ## ⛑️ Helper workflows
 
-- [`check-ci-cd-auth`](./check-ci-cd-auth.yml): verifies that the project's Github repo is able to connect to AWS
+- [`check-ci-cd-auth`](./check-ci-cd-auth.yml.disabled) (disabled): verifies that the project's Github repo is able to connect to AWS
