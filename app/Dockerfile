@@ -147,6 +147,10 @@ ENV HOST=0.0.0.0
 # Disable posthog telemetry for ChromaDB (used for RAG) https://docs.trychroma.com/docs/overview/telemetry
 ENV ANONYMIZED_TELEMETRY=False
 
+# Browsers never call the API directly (the frontend proxies requests server-side),
+# so allow no cross-origin requests. Hayhooks defaults to allowing every origin.
+ENV HAYHOOKS_CORS_ALLOW_ORIGINS="[]"
+
 USER ${RUN_USER}
 
 # Run the application.

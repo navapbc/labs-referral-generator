@@ -1,4 +1,4 @@
-import { getApiDomain } from "./apiDomain";
+import { hayhooksUrl } from "./hayhooksUrl";
 import { ApiErrorResponse, EmailResponsesResponse } from "@/types/api";
 import { ShareMode } from "@/components/ShareOptionsDialog";
 import { EMAIL_TIMEOUT } from "@/config/timeouts";
@@ -27,8 +27,6 @@ export async function emailResponses(
   mode?: ShareMode,
   excludedResourceNames?: string[],
 ) {
-  const apiDomain = await getApiDomain();
-
   // Use consolidated endpoint for all scenarios
   const endpoint = "email_responses";
 
@@ -72,7 +70,7 @@ export async function emailResponses(
     body.excluded_resource_names = excludedResourceNames;
   }
 
-  const url = `${apiDomain}${endpoint}/run`;
+  const url = hayhooksUrl(`${endpoint}/run`);
 
   const headers = {
     "Content-Type": "application/json",

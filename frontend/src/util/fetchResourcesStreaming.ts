@@ -1,5 +1,5 @@
 import { Resource } from "@/types/resources";
-import { getApiDomain } from "./apiDomain";
+import { hayhooksUrl } from "./hayhooksUrl";
 import {
   parseStreamingResources,
   PartialResource,
@@ -28,12 +28,11 @@ export async function fetchResourcesStreaming(
   documents: string[];
   errorMessage?: string;
 }> {
-  const apiDomain = await getApiDomain();
   const useNonRag = process.env.NEXT_PUBLIC_USE_NONRAG === "true";
   const model = useNonRag ? "generate_referrals" : "generate_referrals_rag";
 
   // Use the chat completions endpoint with pipeline name as model
-  const url = `${apiDomain}chat/completions`;
+  const url = hayhooksUrl("chat/completions");
 
   const requestBody: {
     model: string;

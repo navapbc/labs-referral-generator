@@ -29,6 +29,6 @@ module "dev_config" {
   # }
 
   service_override_extra_environment_variables = {
-    NEXT_PUBLIC_API_BASE_URL = "" # TODO Update with your DEV API base URL
+    API_BASE_URL = "" # TODO Update with your DEV API base URL
   }
 }

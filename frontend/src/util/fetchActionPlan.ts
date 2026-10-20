@@ -1,5 +1,5 @@
 import { Resource } from "@/types/resources";
-import { getApiDomain } from "./apiDomain";
+import { hayhooksUrl } from "./hayhooksUrl";
 import { fixJsonControlCharacters, extractField } from "./parseStreamingUtils";
 import { createStreamingFetcher } from "./createStreamingFetcher";
 import { GenerateActionPlanResponse } from "@/types/api";
@@ -40,8 +40,7 @@ export async function fetchActionPlan(
   resultId: string;
   errorMessage?: string;
 }> {
-  const apiDomain = await getApiDomain();
-  const url = apiDomain + "generate_action_plan/run";
+  const url = hayhooksUrl("generate_action_plan/run");
   const headers = {
     "Content-Type": "application/json",
   };
@@ -138,8 +137,7 @@ export async function fetchActionPlanStreaming(
   resultId: string;
   errorMessage?: string;
 }> {
-  const apiDomain = await getApiDomain();
-  const url = `${apiDomain}chat/completions`;
+  const url = hayhooksUrl("chat/completions");
 
   const result = await createStreamingFetcher<ActionPlan, PartialActionPlan>({
     url,

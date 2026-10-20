@@ -41,6 +41,12 @@ locals {
       manage_method     = "manual"
       secret_store_name = "/${var.app_name}-${var.environment}/openai-api-key"
     }
+    # Bearer token required by every API endpoint except /health (app/src/auth.py).
+    # The frontend reads the same parameter; see infra/frontend/app-config/env-config.
+    API_AUTH_TOKEN = {
+      manage_method     = "generated"
+      secret_store_name = "/${var.app_name}-${var.environment}/api-auth-token"
+    }
 
     # Example generated secret
     # RANDOM_SECRET = {
