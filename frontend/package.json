@@ -99,7 +99,7 @@
     "prettier": "^3.4.2",
     "sass": "^1.92.1",
     "sass-loader": "^16.0.0",
-    "storybook": "^8.4.7",
+    "storybook": "^8.6.19",
     "style-loader": "^4.0.0",
     "tw-animate-css": "^1.3.8",
     "typescript": "^5.0.0"
