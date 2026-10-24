@@ -55,12 +55,12 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "server-only": "^0.0.1",
-    "shadcn": "^3.4.0",
+    "shadcn": "^4.22.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.13",
     "tailwindcss-animate": "^1.0.7",
     "unified": "^11.0.5",
-    "zod": "^3.25.76"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
