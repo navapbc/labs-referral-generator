@@ -48,7 +48,7 @@ pandas = "^2.3.3"
 # Need to specify exact torch version due to "Local version label can only be used with `==` or `!=` operators"
 # Side-effect on MacOS: Causes error when running `poetry update`: Unable to find installation candidates for torch (2.9.1+cpu)
 # Workaround: Run `poetry update ...` within the docker `app` container (linux) instead of on MacOS host
-torch = {version = "2.9.1+cpu", source = "pytorch_cpu"}
+torch = {version = "2.13.0", source = "pytorch_cpu"}
 
 [tool.poetry.group.dev.dependencies]
 certifi = "^2025.8.3"
