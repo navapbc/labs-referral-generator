@@ -41,7 +41,7 @@
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "lru-cache": "^10.4.3",
     "lucide-react": "^0.544.0",
     "next": "^15.5.10",
